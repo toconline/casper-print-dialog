@@ -1,0 +1,81 @@
+<!doctype html>
+<!--
+  - Copyright (c) 2014-2016 Cloudware S.A. All rights reserved.
+  -
+  - This file is part of casper-print-dialog.
+  -
+  - casper-print-dialog is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Affero General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - casper-print-dialog  is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with casper-print-dialog.  If not, see <http://www.gnu.org/licenses/>.
+  -
+ -->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../casper-wizard/casper-wizard.html">
+
+<dom-module id="casper-print-dialog">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <casper-wizard-page id="Print" title="Impressão" next="Cancelar">
+      <h1>Hello Guntembergs</h1>
+    </casper-wizard-page>
+
+  </template>
+
+  <script>
+    /**
+     * `casper-print-dialog`
+     * Helper dialog to handle print jobs in casper applications
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class CasperPrintDialog extends CasperWizard {
+
+      static get is () {
+        return 'casper-print-dialog';
+      }
+
+      ready () {
+        super.ready();
+        if ( this.socket === undefined ) {
+           this.socket = window.app.socket;
+        }
+        this.setAttribute('with-backdrop', true);
+        this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
+        this.disablePrevious();
+      }
+
+      setOptions (options) {
+        super.setOptions(options);
+        this.setTitle('Impressão');
+        this.setPageTitle('Print', 'Impressão Documento');
+      }
+
+      _onOpenedChanged (event) {
+        if ( event.detail.value === true ) {
+          if ( this.options['job-id'] ) {
+            this.subscribeJob(this.options['job-id']);
+          }
+        }
+      }
+
+    }
+
+    window.customElements.define(CasperPrintDialog.is, CasperPrintDialog);
+  </script>
+</dom-module>
