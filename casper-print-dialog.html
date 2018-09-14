@@ -29,13 +29,41 @@
         display: block;
       }
     </style>
-    <casper-wizard-page id="Print" title="Impressão" next="Cancelar">
-      <h1>Hello Guntembergs</h1>
-    </casper-wizard-page>
+    <casper-wizard-iframe-page id="Print" title="Impressão" next="Cancelar">
+    </casper-wizard-iframe-page>
 
   </template>
 
   <script>
+
+    class Browser {
+      // Firefox 1.0+
+      static get isFirefox () {
+        return typeof InstallTrigger !== 'undefined';
+      }
+
+      // Internet Explorer 6-11
+      static get isIE () {
+        return navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode;
+      }
+
+      // Edge 20+
+      static get isEdge () {
+        return !Browser.isIE && !!window.StyleMedia;
+      }
+
+      // Chrome 1+
+      static get isChrome () {
+        return !!window.chrome && !!window.chrome.webstore;
+      }
+
+      // At least Safari 3+: "[object HTMLElementConstructor]"
+      static get isSafari ()  {
+        return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 ||
+               navigator.userAgent.toLowerCase().indexOf('safari') !== -1;
+      }
+    }
+
     /**
      * `casper-print-dialog`
      * Helper dialog to handle print jobs in casper applications
@@ -58,6 +86,10 @@
         this.setAttribute('with-backdrop', true);
         this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
         this.disablePrevious();
+        this._iframe = this.$.Print.shadowRoot.querySelector('iframe');
+        this._boundPrintFrame = this._printFrame.bind(this);
+        this.style.opacity = 1.0; // TODO animation
+        //this._boundCloseFrame = this._closeFrame.bind(this);
       }
 
       setOptions (options) {
@@ -68,12 +100,108 @@
 
       _onOpenedChanged (event) {
         if ( event.detail.value === true ) {
-          if ( this.options['job-id'] ) {
-            this.subscribeJob(this.options['job-id']);
+          this._clearIframe();
+
+          switch ( this.options['action'] ) {
+          case 'subscribe-download':
+          case 'subscribe-print':
+            if ( this.options['job-id'] ) {
+              this.subscribeJob(this.options['job-id'], /* timeout */ 60);
+              return;
+            }
+            break;
+          default:
+            break;
           }
+          this.close();
         }
       }
 
+      _clearIframe () {
+        let doc = this._iframe.contentDocument || this._iframe.contentWindow.document;
+        doc.documentElement.innerHTML = "";
+      }
+
+      /*_closeFrame () {
+        if ( Browser.isIE || Browser.isEdge ) {
+          this._iframe.setAttribute('onload', undefined);
+        } else {
+          this._iframe.onload = undefined;
+        }
+        this.close();
+      }*/
+
+      _printFrame () {
+        setTimeout(() => this.style.opacity = 0.0, 2);
+        if ( Browser.isIE || Browser.isEdge ) {
+          this._iframe.setAttribute('onload', undefined);
+        } else {
+          this._iframe.onload = undefined;
+        }
+
+        // If Edge or IE, try catch with execCommand
+        if ( Browser.isIE || Browser.isEdge ) {
+          try {
+            this._iframe.contentWindow.document.execCommand('print', false, null);
+          } catch (e) {
+            this._iframe.contentWindow.print();
+          }
+        } else {
+          // Other browsers
+          this._iframe.contentWindow.print();
+        }
+        this.close();
+      }
+
+      _print (url) {
+        if ( Browser.isIE || Browser.isEdge ) {
+          this._iframe.setAttribute('onload', this._boundPrintFrame);
+        } else {
+          this._iframe.onload = this._boundPrintFrame;
+        }
+        //debugger;
+        //this._iframe.setAttribute('src', url);
+        this._xhrDownloadFile(url);
+        //this._iframe.setAttribute('src', "/static/printjs.pdf");
+      }
+
+      _download (url) {
+        this._iframe.setAttribute('src', url);
+        this.close();
+      }
+
+      // Get the file through a http request
+      _xhrDownloadFile (url) {
+        this._iframe.textContent = "Loading Loading Loading";
+        let req = new window.XMLHttpRequest();
+        req.responseType = 'arraybuffer';
+        req.addEventListener('load', () => {
+          let localPdf = new window.Blob([req.response], {type: 'application/pdf'});
+          this._iframe.setAttribute('src', window.URL.createObjectURL(localPdf));
+        });
+        req.open('GET', url, true);
+        req.send();
+      }
+
+      jobCompletedOnPrint (status_code, message, response) {
+        let url = response.public_link.replace('http://127.0.0.1:3001', ''); // TODO martelada
+
+        this.hideStatusAndProgress();
+        switch (this.options['action']) {
+        case 'subscribe-print':
+          if (Browser.isFirefox) {
+            this._download(url);
+          } else {
+            this._print(url);
+          }
+          break;
+        case 'subscribe-download':
+          this._download(url);
+          break;
+        default:
+          break;
+        }
+      }
     }
 
     window.customElements.define(CasperPrintDialog.is, CasperPrintDialog);
