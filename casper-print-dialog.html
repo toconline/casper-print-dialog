@@ -54,13 +54,17 @@
 
       // Chrome 1+
       static get isChrome () {
-        return !!window.chrome && !!window.chrome.webstore;
+        return !!window.chrome; // && !!window.chrome.webstore;
       }
 
       // At least Safari 3+: "[object HTMLElementConstructor]"
       static get isSafari ()  {
-        return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 ||
-               navigator.userAgent.toLowerCase().indexOf('safari') !== -1;
+        return navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+               navigator.userAgent &&
+               navigator.userAgent.indexOf('CriOS') == -1 &&
+               navigator.userAgent.indexOf('FxiOS') == -1;
+        //return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 ||
+        //       navigator.userAgent.toLowerCase().indexOf('safari') !== -1;
       }
     }
 
@@ -160,9 +164,13 @@
           this._iframe.onload = this._boundPrintFrame;
         }
         //debugger;
-        //this._iframe.setAttribute('src', url);
-        this._xhrDownloadFile(url);
-        //this._iframe.setAttribute('src', "/static/printjs.pdf");
+        if ( Browser.isSafari ) {
+          console.log("Print via XHR !!!");
+          this._xhrDownloadFile(url);
+        } else {
+          console.log("Print DIRECT");
+          this._iframe.setAttribute('src', url);
+        }
       }
 
       _download (url) {
