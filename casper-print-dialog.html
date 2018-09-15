@@ -55,7 +55,7 @@
 
       // Chrome 1+
       static get isChrome () {
-        return !!window.chrome; // && !!window.chrome.webstore;
+        return !!window.chrome;
       }
 
       // At least Safari 3+: "[object HTMLElementConstructor]"
@@ -64,8 +64,6 @@
                navigator.userAgent &&
                navigator.userAgent.indexOf('CriOS') == -1 &&
                navigator.userAgent.indexOf('FxiOS') == -1;
-        //return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 ||
-        //       navigator.userAgent.toLowerCase().indexOf('safari') !== -1;
       }
 
       static get isIos () {
@@ -163,7 +161,6 @@
           console.log("Print via XHR !!!");
           this._xhrDownloadFile(url);
         } else {
-          console.log("Print DIRECT");
           this._iframe.setAttribute('src', url);
         }
       }
@@ -175,7 +172,7 @@
 
       // Get the file through a http request
       _xhrDownloadFile (url) {
-        this._iframe.textContent = "Loading Loading Loading";
+        //this._iframe.textContent = "Loading Loading Loading";
         let req = new window.XMLHttpRequest();
         req.responseType = 'arraybuffer';
         req.addEventListener('load', () => {
@@ -187,28 +184,27 @@
       }
 
       jobCompletedOnPrint (status_code, message, response) {
-        let url = response.public_link.replace('http://127.0.0.1:3001', ''); // TODO martelada
 
         this.hideStatusAndProgress();
         switch (this.options['action']) {
         case 'subscribe-print':
           if ( Browser.isIos ) {
-            this.$.DownloadLink.href = url;
+            this.$.DownloadLink.href = response.public_link;
             this.$.DownloadLink.target = '_blank';
           } else {
             if ( Browser.isFirefox ) {
-              this._download(url);
+              this._download(response.public_link);
             } else {
-              this._print(url);
+              this._print(response.public_link);
             }
           }
           break;
         case 'subscribe-download':
           if ( Browser.isIos ) {
-            this.$.DownloadLink.href = url;
+            this.$.DownloadLink.href = response.public_link;
             this.$.DownloadLink.target = '_blank';
           } else {
-            this._download(url);
+            this._download(response.public_link);
           }
           break;
         default:
