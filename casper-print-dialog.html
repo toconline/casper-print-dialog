@@ -30,6 +30,7 @@
       }
     </style>
     <casper-wizard-iframe-page id="Print" title="Impressão" next="Cancelar">
+      <a slot="footer" id="DownloadLink">Download me</a>
     </casper-wizard-iframe-page>
 
   </template>
@@ -66,6 +67,11 @@
         //return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 ||
         //       navigator.userAgent.toLowerCase().indexOf('safari') !== -1;
       }
+
+      static get isIos () {
+        return navigator && (navigator.platform === 'iPad' || navigator.platform === 'iPhone');
+      }
+
     }
 
     /**
@@ -93,7 +99,6 @@
         this._iframe = this.$.Print.shadowRoot.querySelector('iframe');
         this._boundPrintFrame = this._printFrame.bind(this);
         this.style.opacity = 1.0; // TODO animation
-        //this._boundCloseFrame = this._closeFrame.bind(this);
       }
 
       setOptions (options) {
@@ -126,17 +131,8 @@
         doc.documentElement.innerHTML = "";
       }
 
-      /*_closeFrame () {
-        if ( Browser.isIE || Browser.isEdge ) {
-          this._iframe.setAttribute('onload', undefined);
-        } else {
-          this._iframe.onload = undefined;
-        }
-        this.close();
-      }*/
-
       _printFrame () {
-        setTimeout(() => this.style.opacity = 0.0, 2);
+        //setTimeout(() => this.style.opacity = 0.0, 2);
         if ( Browser.isIE || Browser.isEdge ) {
           this._iframe.setAttribute('onload', undefined);
         } else {
@@ -163,7 +159,6 @@
         } else {
           this._iframe.onload = this._boundPrintFrame;
         }
-        //debugger;
         if ( Browser.isSafari ) {
           console.log("Print via XHR !!!");
           this._xhrDownloadFile(url);
@@ -197,14 +192,24 @@
         this.hideStatusAndProgress();
         switch (this.options['action']) {
         case 'subscribe-print':
-          if (Browser.isFirefox) {
-            this._download(url);
+          if ( Browser.isIos ) {
+            this.$.DownloadLink.href = url;
+            this.$.DownloadLink.target = '_blank';
           } else {
-            this._print(url);
+            if ( Browser.isFirefox ) {
+              this._download(url);
+            } else {
+              this._print(url);
+            }
           }
           break;
         case 'subscribe-download':
-          this._download(url);
+          if ( Browser.isIos ) {
+            this.$.DownloadLink.href = url;
+            this.$.DownloadLink.target = '_blank';
+          } else {
+            this._download(url);
+          }
           break;
         default:
           break;
