@@ -132,12 +132,13 @@
       _printFrame () {
         //setTimeout(() => this.style.opacity = 0.0, 2);
         this._iframe.onload = undefined;
+        this._iframe.focus();
         this._iframe.contentWindow.print();
+
         this.close();
       }
 
       _print (url) {
-
         this._iframe.onload = this._boundPrintFrame;
         if ( Browser.isSafari ) {
           this._xhrDownloadFile(url);
@@ -165,16 +166,14 @@
       }
 
       jobCompletedOnPrint (status_code, message, response) {
-
         this.hideStatusAndProgress();
+        this.$.DownloadLink.href = response.public_link;
+        this.$.DownloadLink.target = '_blank';
         switch (this.options['action']) {
         case 'subscribe-print':
           if ( Browser.isIos ) {
-            this.$.DownloadLink.href = response.public_link;
-            this.$.DownloadLink.target = '_blank';
           } else {
             if ( Browser.isFirefox || Browser.isEdge || Browser.isIE) {
-              this._download(response.public_link);
               try {
                 let win = window.open(response.public_link, '_blank');
                 win.focus();
@@ -193,13 +192,10 @@
           }
           break;
         case 'subscribe-download':
-          if ( Browser.isIos ) {
-            this.$.DownloadLink.href = response.public_link;
-            this.$.DownloadLink.target = '_blank';
-          } else {
-            this._iframe.setAttribute('src', url);
-            this.close();
-          }
+          this.$.DownloadLink.href = response.public_link;
+          this.$.DownloadLink.target = '_blank';
+          this._iframe.setAttribute('src', response.public_link);
+          this.close();
           break;
         default:
           break;
