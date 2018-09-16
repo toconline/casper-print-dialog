@@ -178,11 +178,14 @@
               try {
                 let win = window.open(response.public_link, '_blank');
                 win.focus();
+                this.close();
               } catch (e) {
                 //params.onError(e)
+                this.$.DownloadLink.href = response.public_link;
+                this.$.DownloadLink.target = '_blank';
                 alert("Blocked" + e);
               } finally {
-                this.close();
+
               }
             } else {
               this._print(response.public_link);
@@ -194,7 +197,8 @@
             this.$.DownloadLink.href = response.public_link;
             this.$.DownloadLink.target = '_blank';
           } else {
-            this._download(response.public_link);
+            this._iframe.setAttribute('src', url);
+            this.close();
           }
           break;
         default:
