@@ -131,34 +131,15 @@
 
       _printFrame () {
         //setTimeout(() => this.style.opacity = 0.0, 2);
-        if ( Browser.isIE || Browser.isEdge ) {
-          this._iframe.setAttribute('onload', undefined);
-        } else {
-          this._iframe.onload = undefined;
-        }
-
-        // If Edge or IE, try catch with execCommand
-        if ( Browser.isIE || Browser.isEdge ) {
-          try {
-            this._iframe.contentWindow.document.execCommand('print', false, null);
-          } catch (e) {
-            this._iframe.contentWindow.print();
-          }
-        } else {
-          // Other browsers
-          this._iframe.contentWindow.print();
-        }
+        this._iframe.onload = undefined;
+        this._iframe.contentWindow.print();
         this.close();
       }
 
       _print (url) {
-        if ( Browser.isIE || Browser.isEdge ) {
-          this._iframe.setAttribute('onload', this._boundPrintFrame);
-        } else {
-          this._iframe.onload = this._boundPrintFrame;
-        }
+
+        this._iframe.onload = this._boundPrintFrame;
         if ( Browser.isSafari ) {
-          console.log("Print via XHR !!!");
           this._xhrDownloadFile(url);
         } else {
           this._iframe.setAttribute('src', url);
@@ -192,8 +173,17 @@
             this.$.DownloadLink.href = response.public_link;
             this.$.DownloadLink.target = '_blank';
           } else {
-            if ( Browser.isFirefox ) {
+            if ( Browser.isFirefox || Browser.isEdge || Browser.isIE) {
               this._download(response.public_link);
+              try {
+                let win = window.open(response.public_link, '_blank');
+                win.focus();
+              } catch (e) {
+                //params.onError(e)
+                alert("Blocked" + e);
+              } finally {
+                this.close();
+              }
             } else {
               this._print(response.public_link);
             }
