@@ -88,9 +88,6 @@
 
       ready () {
         super.ready();
-        if ( this.socket === undefined ) {
-           this.socket = window.app.socket;
-        }
         this.setAttribute('with-backdrop', true);
         this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
         this.disablePrevious();
@@ -101,8 +98,8 @@
 
       setOptions (options) {
         super.setOptions(options);
-        this.setTitle('Impressão');
-        this.setPageTitle('Print', 'Impressão Documento');
+        this.setTitle(options.title || 'Impressão');
+        this.setPageTitle('Print', options.pageTitle || 'Impressão Documento');
       }
 
       _onOpenedChanged (event) {
@@ -113,14 +110,14 @@
           case 'subscribe-download':
           case 'subscribe-print':
             if ( this.options['job-id'] ) {
-              this.subscribeJob(this.options['job-id'], /* timeout */ 60);
+              this.subscribeJob(this.options['job-id'], this.options.timeout || 60);
               return;
             }
             break;
           default:
+            this.submitJob(this.options, this.options.timeout || 60);
             break;
           }
-          this.close();
         }
       }
 
@@ -147,10 +144,10 @@
         }
       }
 
-      _download (url) {
+     /* _download (url) {
         this._iframe.setAttribute('src', url);
         this.close();
-      }
+      }*/
 
       // Get the file through a http request
       _xhrDownloadFile (url) {
@@ -198,6 +195,10 @@
           this.close();
           break;
         default:
+          if ( status_code == 200 && response.public_link !== undefined ) {
+            this._iframe.setAttribute('src', response.public_link);
+            this.close();
+          }
           break;
         }
       }
