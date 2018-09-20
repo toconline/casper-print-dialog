@@ -105,15 +105,15 @@
       _onOpenedChanged (event) {
         if ( event.detail.value === true ) {
           this._clearIframe();
-
-          switch ( this.options['action'] ) {
+          switch ( this.options.action ) {
           case 'subscribe-download':
           case 'subscribe-print':
             if ( this.options['job-id'] ) {
               this.subscribeJob(this.options['job-id'], this.options.timeout || 60);
-              return;
             }
             break;
+          case 'epaper-download':
+          case 'epaper-print':
           default:
             this.submitJob(this.options, this.options.timeout || 60);
             break;
@@ -162,12 +162,33 @@
         req.send();
       }
 
+      static getDateForFilename () {
+        const  today = new Date();
+        const  year = today.getFullYear();
+        const  base_month = today.getMonth() + 1
+        const  month = base_month.toString().length == 1 ? '0' + base_month : base_month;
+        const  full_date = year + '-' + month;
+        return full_date;
+      }
+
+      translateFilename (i18n_key, parameters) {
+        if ( parameters.date === undefined ) {
+          parameters.date = CasperPrintDialog.getDateForFilename();
+        }
+        try {
+          return this.i18n.apply(this, [i18n_key, parameters]);
+        } catch (e) {
+          return i18n_key;
+        }
+      }
+
       jobCompletedOnPrint (status_code, message, response) {
         this.hideStatusAndProgress();
         this.$.DownloadLink.href = response.public_link;
         this.$.DownloadLink.target = '_blank';
         switch (this.options['action']) {
         case 'subscribe-print':
+        case 'epaper-print':
           if ( Browser.isIos ) {
           } else {
             if ( Browser.isFirefox || Browser.isEdge || Browser.isIE) {
@@ -189,6 +210,7 @@
           }
           break;
         case 'subscribe-download':
+        case 'epaper-download':
           this.$.DownloadLink.href = response.public_link;
           this.$.DownloadLink.target = '_blank';
           this._iframe.setAttribute('src', response.public_link);
