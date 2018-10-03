@@ -186,6 +186,15 @@
         this.hideStatusAndProgress();
         this.$.DownloadLink.href = response.public_link;
         this.$.DownloadLink.target = '_blank';
+
+        if ( typeof this.options.on_job_completed === 'function' ) {
+          if ( this.options.on_job_completed(status_code, message, response) === true ) {
+            // Suppress default handling
+            this.close();
+            return;
+          }
+        }
+
         switch (this.options['action']) {
         case 'subscribe-print':
         case 'epaper-print':
