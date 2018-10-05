@@ -96,14 +96,10 @@
         this.style.opacity = 1.0; // TODO animation
       }
 
-      setOptions (options) {
-        super.setOptions(options);
-        this.setTitle(options.title || 'Impressão');
-        this.setPageTitle('Print', options.pageTitle || 'Impressão Documento');
-      }
-
       _onOpenedChanged (event) {
         if ( event.detail.value === true ) {
+          this.setTitle(this.options.title || 'Impressão');
+          this.setPageTitle('Print', this.options.pageTitle || 'Impressão Documento');
           this._clearIframe();
           switch ( this.options.action ) {
           case 'subscribe-download':
