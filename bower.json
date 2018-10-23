@@ -4,7 +4,7 @@
   "main": "casper-print-dialog.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "casper-wizard": "casper2020/casper-wizard#^0.0.30"
+    "casper-wizard": "casper2020/casper-wizard#^0.0.32"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
