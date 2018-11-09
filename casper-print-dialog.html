@@ -28,10 +28,67 @@
       :host {
         display: block;
       }
+
+      .iframe {
+        overflow: auto;
+        border: none;
+        flex-grow: 2.0;
+        width: 100%;
+      }
+
+      #print-dialog-overlay-holder {
+        width: 100%;
+        flex-grow: 2.0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 42px;
+      }
+
+      #print-dialog-overlay {
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #print-dialog-overlay-message {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.73);
+        color: white;
+        font-weight: bold;
+      }
+
+      .download_icon {
+        fill: #ff2f2f;
+        --iron-icon-height: 72px;
+        --iron-icon-width: 72px;
+      }
+
     </style>
-    <casper-wizard-iframe-page id="Print" title="Impressão" next="Cancelar">
-      <a slot="footer" id="DownloadLink">Download me</a>
-    </casper-wizard-iframe-page>
+
+    <casper-wizard-page id="Print" title="Impressão" next="Cancelar">
+      <div id="print-dialog-overlay-holder">
+        <template is="dom-if" if="[[iframeOverlay]]">
+          <div id="print-dialog-overlay">
+            <div id="print-dialog-overlay-message" on-click="_openLinkInTab">
+              <iron-icon icon="casper-icons:file-pdf" class="download_icon"></iron-icon>
+              <span>Carregue aqui para ver o seu PDF</span>
+            </div>
+          </div>
+        </template>
+        <iframe class="iframe" id="iframe" srcdoc$="[[srcdoc]]"></iframe>
+      </div>
+    </casper-wizard-page>
 
   </template>
 
@@ -53,13 +110,22 @@
         return 'casper-print-dialog';
       }
 
+      static get properties () {
+        return {
+          iframeOverlay: {
+            type:  Boolean,
+            value: false
+          }
+        };
+      }
+
       ready () {
         super.ready();
         this.setAttribute('with-backdrop', true);
         this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
         this.disablePrevious();
-        this._iframe = this.$.Print.shadowRoot.querySelector('iframe');
-        this.$.Print.iframeOverlay = Browser.isIos;
+        this._iframe = this.$.iframe;
+        this.iframeOverlay = true || Browser.isIos;
         this._boundPrintFrame = this._printFrame.bind(this);
         this.style.opacity = 1.0; // TODO animation
       }
@@ -73,13 +139,13 @@
           case 'subscribe-download':
           case 'subscribe-print':
             if ( this.options['job-id'] ) {
-              this.subscribeJob(this.options['job-id'], this.options.timeout || 5);
+              this.subscribeJob(this.options['job-id'], this.options.timeout || 60);
             }
             break;
           case 'epaper-download':
           case 'epaper-print':
           default:
-            this.submitJob(this.options, this.options.timeout || 5);
+            this.submitJob(this.options, this.options.timeout || 60);
             break;
           }
         }
@@ -94,21 +160,17 @@
         this._iframe.onload = undefined;
         this._iframe.focus();
         this._iframe.contentWindow.print();
-
-        if (!Browser.isIos ) {
-          this.close();
-        }
+        this.close();
       }
 
       _print (url) {
         this._iframe.onload = this._boundPrintFrame;
         // ends here for now
-        if ( Browser.isSafari || Browser.isFirefox) {
+        if ( Browser.isIos || Browser.isSafari ) {
           this._xhrDownloadFile(url);
         } else {
           this._iframe.setAttribute('src', url);
         }
-        this._iframe.setAttribute('data-src', url);
       }
 
       // Get the file through a http request
@@ -120,6 +182,7 @@
           if ( req.status === 200 ) {
             let localPdf = new window.Blob([req.response], {type: 'application/pdf'});
             this._iframe.setAttribute('src', window.URL.createObjectURL(localPdf));
+            this._dataSrc = this._iframe.src;
           }
         });
         req.open('GET', url, true);
@@ -146,10 +209,23 @@
         }
       }
 
+      _openLinkInTab () {
+        this._openOnTab(this._dataSrc);
+      }
+
+      _openOnTab (publicLink) {
+        try {
+          let win = window.open(publicLink, '_blank');
+          win.focus();
+          this.close();
+        } catch (e) {
+          console.error("PDF blocked");
+        }
+      }
+
       jobCompletedOnPrint (status_code, message, response) {
         this.hideStatusAndProgress();
-        this.$.DownloadLink.href   = response.public_link;
-        this.$.DownloadLink.target = '_blank';
+        this._dataSrc = response.public_link;
 
         if ( typeof this.options.on_job_completed === 'function' ) {
           if ( this.options.on_job_completed(status_code, message, response) === true ) {
@@ -162,14 +238,8 @@
         switch (this.options['action']) {
           case 'subscribe-print':
           case 'epaper-print':
-            if ( Browser.isFirefox || Browser.isEdge || Browser.isIE) {
-              try {
-                let win = window.open(response.public_link, '_blank');
-                win.focus();
-                this.close();
-              } catch (e) {
-                console.warn("PDF blocked");
-              }
+            if ( Browser.isFirefox || Browser.isEdge || Browser.isIE ) {
+              this._openOnTab(response.public_link);
             } else {
               this._print(response.public_link);
             }
@@ -178,12 +248,15 @@
           case 'epaper-download':
           default:
             if ( status_code == 200 && response.public_link !== undefined ) {
-              this._iframe.setAttribute('src', response.public_link);
-              this.close();
+              if ( ! Browser.isIos ) {
+                this._iframe.setAttribute('src', response.public_link);
+                this.close();
+              }
             }
             break;
         }
       }
+
     }
 
     window.customElements.define(CasperPrintDialog.is, CasperPrintDialog);
