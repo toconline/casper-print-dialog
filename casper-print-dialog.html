@@ -125,7 +125,7 @@
         this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
         this.disablePrevious();
         this._iframe = this.$.iframe;
-        this.iframeOverlay = true || Browser.isIos;
+        this.iframeOverlay = Browser.isIos || Browser.isSafari;
         this._boundPrintFrame = this._printFrame.bind(this);
         this.style.opacity = 1.0; // TODO animation
       }
@@ -247,7 +247,7 @@
           case 'subscribe-download':
           case 'epaper-download':
           default:
-            if ( status_code == 200 && response.public_link !== undefined ) {
+            if ( status_code === 200 && response.public_link !== undefined ) {
               if ( ! Browser.isIos ) {
                 this._iframe.setAttribute('src', response.public_link);
                 this.close();
