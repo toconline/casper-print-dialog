@@ -37,40 +37,7 @@
 
   <script>
 
-    class Browser {
-      // Firefox 1.0+
-      static get isFirefox () {
-        return typeof InstallTrigger !== 'undefined';
-      }
-
-      // Internet Explorer 6-11
-      static get isIE () {
-        return navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode;
-      }
-
-      // Edge 20+
-      static get isEdge () {
-        return !Browser.isIE && !!window.StyleMedia;
-      }
-
-      // Chrome 1+
-      static get isChrome () {
-        return !!window.chrome;
-      }
-
-      // At least Safari 3+: "[object HTMLElementConstructor]"
-      static get isSafari ()  {
-        return navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-               navigator.userAgent &&
-               navigator.userAgent.indexOf('CriOS') == -1 &&
-               navigator.userAgent.indexOf('FxiOS') == -1;
-      }
-
-      static get isIos () {
-        return navigator && (navigator.platform === 'iPad' || navigator.platform === 'iPhone');
-      }
-
-    }
+    'use strict';
 
     /**
      * `casper-print-dialog`
@@ -92,6 +59,7 @@
         this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
         this.disablePrevious();
         this._iframe = this.$.Print.shadowRoot.querySelector('iframe');
+        this.$.Print.iframeOverlay = Browser.isIos;
         this._boundPrintFrame = this._printFrame.bind(this);
         this.style.opacity = 1.0; // TODO animation
       }
@@ -105,13 +73,13 @@
           case 'subscribe-download':
           case 'subscribe-print':
             if ( this.options['job-id'] ) {
-              this.subscribeJob(this.options['job-id'], this.options.timeout || 60);
+              this.subscribeJob(this.options['job-id'], this.options.timeout || 5);
             }
             break;
           case 'epaper-download':
           case 'epaper-print':
           default:
-            this.submitJob(this.options, this.options.timeout || 60);
+            this.submitJob(this.options, this.options.timeout || 5);
             break;
           }
         }
@@ -123,27 +91,25 @@
       }
 
       _printFrame () {
-        //setTimeout(() => this.style.opacity = 0.0, 2);
         this._iframe.onload = undefined;
         this._iframe.focus();
         this._iframe.contentWindow.print();
 
-        this.close();
+        if (!Browser.isIos ) {
+          this.close();
+        }
       }
 
       _print (url) {
         this._iframe.onload = this._boundPrintFrame;
-        if ( Browser.isSafari ) {
+        // ends here for now
+        if ( Browser.isSafari || Browser.isFirefox) {
           this._xhrDownloadFile(url);
         } else {
           this._iframe.setAttribute('src', url);
         }
+        this._iframe.setAttribute('data-src', url);
       }
-
-     /* _download (url) {
-        this._iframe.setAttribute('src', url);
-        this.close();
-      }*/
 
       // Get the file through a http request
       _xhrDownloadFile (url) {
@@ -151,8 +117,10 @@
         let req = new window.XMLHttpRequest();
         req.responseType = 'arraybuffer';
         req.addEventListener('load', () => {
-          let localPdf = new window.Blob([req.response], {type: 'application/pdf'});
-          this._iframe.setAttribute('src', window.URL.createObjectURL(localPdf));
+          if ( req.status === 200 ) {
+            let localPdf = new window.Blob([req.response], {type: 'application/pdf'});
+            this._iframe.setAttribute('src', window.URL.createObjectURL(localPdf));
+          }
         });
         req.open('GET', url, true);
         req.send();
@@ -180,7 +148,7 @@
 
       jobCompletedOnPrint (status_code, message, response) {
         this.hideStatusAndProgress();
-        this.$.DownloadLink.href = response.public_link;
+        this.$.DownloadLink.href   = response.public_link;
         this.$.DownloadLink.target = '_blank';
 
         if ( typeof this.options.on_job_completed === 'function' ) {
@@ -192,41 +160,28 @@
         }
 
         switch (this.options['action']) {
-        case 'subscribe-print':
-        case 'epaper-print':
-          if ( Browser.isIos ) {
-          } else {
+          case 'subscribe-print':
+          case 'epaper-print':
             if ( Browser.isFirefox || Browser.isEdge || Browser.isIE) {
               try {
                 let win = window.open(response.public_link, '_blank');
                 win.focus();
                 this.close();
               } catch (e) {
-                //params.onError(e)
-                this.$.DownloadLink.href = response.public_link;
-                this.$.DownloadLink.target = '_blank';
-                alert("Blocked" + e);
-              } finally {
-
+                console.warn("PDF blocked");
               }
             } else {
               this._print(response.public_link);
             }
-          }
-          break;
-        case 'subscribe-download':
-        case 'epaper-download':
-          this.$.DownloadLink.href = response.public_link;
-          this.$.DownloadLink.target = '_blank';
-          this._iframe.setAttribute('src', response.public_link);
-          this.close();
-          break;
-        default:
-          if ( status_code == 200 && response.public_link !== undefined ) {
-            this._iframe.setAttribute('src', response.public_link);
-            this.close();
-          }
-          break;
+            break;
+          case 'subscribe-download':
+          case 'epaper-download':
+          default:
+            if ( status_code == 200 && response.public_link !== undefined ) {
+              this._iframe.setAttribute('src', response.public_link);
+              this.close();
+            }
+            break;
         }
       }
     }
