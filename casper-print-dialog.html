@@ -27,6 +27,12 @@
     <style>
       :host {
         display: block;
+        opacity: 0;
+      }
+
+      :host(.visible) {
+        transition: opacity 1s;
+        opacity: 1;
       }
 
       .iframe {
@@ -121,17 +127,17 @@
 
       ready () {
         super.ready();
-        this.setAttribute('with-backdrop', true);
         this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
         this.disablePrevious();
         this._iframe = this.$.iframe;
         this.iframeOverlay = Browser.isIos || Browser.isSafari;
         this._boundPrintFrame = this._printFrame.bind(this);
-        this.style.opacity = 1.0; // TODO animation
       }
 
       _onOpenedChanged (event) {
         if ( event.detail.value === true ) {
+          this.removeAttribute('with-backdrop');
+          this.className = '';
           this.setTitle(this.options.title || 'Impressão');
           this.setPageTitle('Print', this.options.pageTitle || 'Impressão Documento');
           this._clearIframe();
@@ -159,8 +165,17 @@
       _printFrame () {
         this._iframe.onload = undefined;
         this._iframe.focus();
-        this._iframe.contentWindow.print();
-        this.close();
+        if ( ! Browser.isIos ) {
+          this._iframe.contentWindow.print();        
+          this.close();
+        } else {
+          this._fadeIn();
+        }
+      }
+
+      _fadeIn () {
+        this.setAttribute('with-backdrop', true);
+        this.className = "visible";
       }
 
       _print (url) {
