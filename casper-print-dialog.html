@@ -238,6 +238,11 @@
         }
       }
 
+      errorOnPrint (notification) {
+        super.showStatusPage(notification);
+        this._fadeIn();
+      }
+
       jobCompletedOnPrint (status_code, message, response) {
         this.hideStatusAndProgress();
         this._dataSrc = response.public_link;
