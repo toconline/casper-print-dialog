@@ -31,7 +31,7 @@
       }
 
       :host(.visible) {
-        transition: opacity 1s;
+        transition: opacity 0.5s;
         opacity: 1;
       }
 
@@ -121,7 +121,8 @@
           iframeOverlay: {
             type:  Boolean,
             value: false
-          }
+          },
+          fadeTimeoutObj: Object
         };
       }
 
@@ -141,6 +142,7 @@
           this.setTitle(this.options.title || 'Impressão');
           this.setPageTitle('Print', this.options.pageTitle || 'Impressão Documento');
           this._clearIframe();
+          this.fadeTimeoutObj = setTimeout(() => this._fadeIn(), 300);
           switch ( this.options.action ) {
           case 'subscribe-download':
           case 'subscribe-print':
@@ -254,6 +256,8 @@
             return;
           }
         }
+
+        clearTimeout(this.fadeTimeoutObj);
 
         switch (this.options['action']) {
           case 'subscribe-print':
