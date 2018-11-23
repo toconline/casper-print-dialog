@@ -20,6 +20,7 @@
  -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../casper-utils/casper-utils.html">
 <link rel="import" href="../casper-wizard/casper-wizard.html">
 
 <dom-module id="casper-print-dialog">
@@ -100,7 +101,7 @@
 
   <script>
 
-    'use strict';
+    "use strict";
 
     /**
      * `casper-print-dialog`
@@ -131,7 +132,7 @@
         this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
         this.disablePrevious();
         this._iframe = this.$.iframe;
-        this.iframeOverlay = Browser.isIos || Browser.isSafari;
+        this.iframeOverlay = CasperBrowser.isIos || CasperBrowser.isSafari;
         this._boundPrintFrame = this._printFrame.bind(this);
       }
 
@@ -167,7 +168,7 @@
       _printFrame () {
         this._iframe.onload = undefined;
         this._iframe.focus();
-        if ( ! Browser.isIos ) {
+        if ( ! CasperBrowser.isIos ) {
           this._iframe.contentWindow.print();        
           this.close();
         } else {
@@ -183,7 +184,7 @@
       _print (url) {
         this._iframe.onload = this._boundPrintFrame;
         // ends here for now
-        if ( Browser.isIos || Browser.isSafari ) {
+        if ( CasperBrowser.isIos || CasperBrowser.isSafari ) {
           this._xhrDownloadFile(url);
         } else {
           this._iframe.setAttribute('src', url);
@@ -262,7 +263,7 @@
         switch (this.options['action']) {
           case 'subscribe-print':
           case 'epaper-print':
-            if ( Browser.isFirefox || Browser.isEdge || Browser.isIE ) {
+            if ( CasperBrowser.isFirefox || CasperBrowser.isEdge || CasperBrowser.isIE ) {
               this._openOnTab(response.public_link);
             } else {
               this._print(response.public_link);
@@ -272,7 +273,7 @@
           case 'epaper-download':
           default:
             if ( status_code === 200 && response.public_link !== undefined ) {
-              if ( ! Browser.isIos ) {
+              if ( ! CasperBrowser.isIos ) {
                 this._iframe.setAttribute('src', response.public_link);
                 this.close();
               }
