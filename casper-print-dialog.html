@@ -169,7 +169,7 @@
         this._iframe.onload = undefined;
         this._iframe.focus();
         if ( ! CasperBrowser.isIos ) {
-          this._iframe.contentWindow.print();        
+          this._iframe.contentWindow.print();
           this.close();
         } else {
           this._fadeIn();
@@ -237,6 +237,7 @@
           win.focus();
           this.close();
         } catch (e) {
+          this.close();
           console.error("PDF blocked");
         }
       }
