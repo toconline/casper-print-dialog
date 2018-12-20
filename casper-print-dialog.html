@@ -154,7 +154,23 @@
           case 'epaper-download':
           case 'epaper-print':
           default:
-            this.submitJob(this.options, this.options.timeout || 60);
+            let ttr, timeout;
+
+            switch (this.option.tube ) {
+              case 'casper-print-queue':
+                ttr      = this.options.ttr     || 250;   // Almost as big as the default database timeout
+                timeout  = this.options.timeout || 72000; // 20h
+                break;
+              case 'casper-print-queue-hd':
+                ttr      = this.options.ttr     || 0;     // Time out is controlled by the casper-print-queue
+                timeout  = this.options.timeout || 72000; // 20h
+                break;
+              default:
+                ttr      = this.options.ttr     || 250;   // Almost as big as the default database timeout
+                timeout  = this.options.timeout || 72000; // 20h
+                break;
+            }
+            this.submitJob(this.options, timeout, ttr);
             break;
           }
         }
