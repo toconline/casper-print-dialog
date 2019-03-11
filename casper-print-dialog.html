@@ -259,6 +259,14 @@
       }
 
       errorOnPrint (notification) {
+        if (typeof this.options.on_job_failed === 'function') {
+          this.options.on_job_failed(
+            notification.status_code,
+            notification.message,
+            notification.response
+          );
+        }
+
         super.showStatusPage(notification);
         this._fadeIn();
       }
