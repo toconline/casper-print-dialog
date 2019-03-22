@@ -156,7 +156,12 @@
           default:
             let ttr, timeout;
 
-            switch (this.options.tube ) {
+            const isControlledJob = this.options.tube === 'job-controller';
+            this.options.tube = !isControlledJob
+              ? this.options.tube
+              : this.options.destination_tube;
+
+            switch (this.options.tube) {
               case 'casper-print-queue':
                 ttr      = this.options.ttr     || 250;   // Almost as big as the default database timeout
                 timeout  = this.options.timeout || 72000; // 20h
@@ -170,7 +175,10 @@
                 timeout  = this.options.timeout || 72000; // 20h
                 break;
             }
-            this.submitJob(this.options, timeout, ttr);
+
+            !isControlledJob
+              ? this.submitJob(this.options, timeout, ttr)
+              : this.submitControlledJob(this.options, timeout, ttr);
             break;
           }
         }
