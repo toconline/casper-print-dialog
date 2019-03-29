@@ -1,7 +1,7 @@
 {
   "description": "Helper dialog to handle print jobs in casper applications",
   "name": "@casper2020/casper-print-dialog",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
@@ -10,7 +10,7 @@
   },
   "main": "casper-print-dialog.js",
   "dependencies": {
-    "@casper2020/casper-wizard": "^1.0.0-rc.1",
+    "@casper2020/casper-wizard": "^1.0.0-rc.2",
     "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {

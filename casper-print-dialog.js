@@ -18,7 +18,8 @@
   -
  */
 
-import '@casper2020/casper-wizard/casper-wizard';
+import '@casper2020/casper-wizard/casper-wizard-page.js';
+import { CasperWizard } from '@casper2020/casper-wizard/casper-wizard.js';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 
 class CasperPrintDialog extends CasperWizard {
