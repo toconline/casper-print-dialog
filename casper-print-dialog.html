@@ -175,17 +175,7 @@
                 timeout  = this.options.timeout || 72000; // 20h
                 break;
             }
-
-            // TODO Remove me.
-            app.session_data.certified_software_notice = 'Powered by Business';
-
-            // Check if there is a software notice stored in session.
-            if (app.session_data.hasOwnProperty('certified_software_notice')) {
-              this.options.overridable_system_variables = {
-                CERTIFIED_SOFTWARE_NOTICE: app.session_data.certified_software_notice
-              };
-            }
-
+            
             !isControlledJob
               ? this.submitJob(this.options, timeout, ttr)
               : this.submitControlledJob(this.options, timeout, ttr);
