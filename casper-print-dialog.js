@@ -93,7 +93,7 @@ class CasperPrintDialog extends CasperWizard {
               </div>
             </div>
           </template>
-          <iframe class="iframe" id="iframe" srcdoc\$="[[srcdoc]]"></iframe>
+          <iframe class="iframe" id="iframe" srcdoc$="[[srcdoc]]"></iframe>
         </div>
       </casper-wizard-page>
     `;
@@ -160,6 +160,13 @@ class CasperPrintDialog extends CasperWizard {
             ttr      = this.options.ttr     || 250;   // Almost as big as the default database timeout
             timeout  = this.options.timeout || 72000; // 20h
             break;
+        }
+
+        // Check if there is a software notice stored in session.
+        if (app.session_data.app.hasOwnProperty('certified_software_notice')) {
+          this.options.overridable_system_variables = {
+            CERTIFIED_SOFTWARE_NOTICE: app.session_data.app.certified_software_notice
+          };
         }
 
         !isControlledJob
