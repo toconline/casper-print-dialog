@@ -109,7 +109,11 @@ class CasperPrintDialog extends CasperWizard {
         type:  Boolean,
         value: false
       },
-      fadeTimeoutObj: Object
+      fadeTimeoutObj: Object,
+      errorMessage: {
+        type: String,
+        value: 'Ocorreu um erro ao efectuar esta operação e este foi reportado automaticamente. Tente novamente mais tarde.'
+      }
     };
   }
 
@@ -260,6 +264,9 @@ class CasperPrintDialog extends CasperWizard {
   }
 
   errorOnPrint (notification) {
+    // Don't display the job error directly.
+    notification.message = [this.errorMessage];
+
     if (typeof this.options.on_job_failed === 'function') {
       this.options.on_job_failed(
         notification.status_code,
