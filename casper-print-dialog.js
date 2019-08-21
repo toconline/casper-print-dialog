@@ -264,8 +264,8 @@ class CasperPrintDialog extends CasperWizard {
   }
 
   errorOnPrint (notification) {
-    // Don't display the job error directly.
-    notification.message = [this.errorMessage];
+    // Don't display the job error directly if the message is not a custom one.
+    if (!notification.custom) notification.message = [this.errorMessage];
 
     if (typeof this.options.on_job_failed === 'function') {
       this.options.on_job_failed(
