@@ -1,7 +1,7 @@
 {
   "description": "Helper dialog to handle print jobs in casper applications",
   "name": "@casper2020/casper-print-dialog",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
