@@ -11,7 +11,7 @@
   "main": "casper-print-dialog.js",
   "dependencies": {
     "@casper2020/casper-wizard": "^1.x",
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.x"
   },
   "devDependencies": {
     "@polymer/iron-demo-helpers": "^3.0.0",
