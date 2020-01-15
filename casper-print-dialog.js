@@ -18,9 +18,10 @@
   -
  */
 
+import '@casper2020/casper-icons/casper-icon.js';
 import '@casper2020/casper-wizard/casper-wizard-page.js';
+import { html } from '@polymer/polymer/polymer-element.js';
 import { CasperWizard } from '@casper2020/casper-wizard/casper-wizard.js';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 
 class CasperPrintDialog extends CasperWizard {
   static get template() {
@@ -76,9 +77,9 @@ class CasperPrintDialog extends CasperWizard {
         }
 
         .download_icon {
-          fill: #ff2f2f;
-          --iron-icon-height: 72px;
-          --iron-icon-width: 72px;
+          width: 60px;
+          height: 60px;
+          color: #ff2f2f;
         }
 
       </style>
@@ -88,7 +89,7 @@ class CasperPrintDialog extends CasperWizard {
           <template is="dom-if" if="[[iframeOverlay]]">
             <div id="print-dialog-overlay">
               <div id="print-dialog-overlay-message" on-click="_openLinkInTab">
-                <iron-icon icon="casper-icons:file-pdf" class="download_icon"></iron-icon>
+                <casper-icon icon="fa-light:file-pdf" class="download_icon"></casper-icon>
                 <span>Carregue aqui para ver o seu PDF</span>
               </div>
             </div>
