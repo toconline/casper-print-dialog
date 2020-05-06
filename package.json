@@ -1,7 +1,10 @@
 {
   "description": "Helper dialog to handle print jobs in casper applications",
-  "name": "@casper2020/casper-print-dialog",
+  "name": "@cloudware-casper/casper-print-dialog",
   "version": "1.2.0",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
