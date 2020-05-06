@@ -18,10 +18,10 @@
   -
  */
 
-import '@casper2020/casper-icons/casper-icon.js';
-import '@casper2020/casper-wizard/casper-wizard-page.js';
+import '@cloudware-casper/casper-icons/casper-icon.js';
+import '@cloudware-casper/casper-wizard/casper-wizard-page.js';
 import { html } from '@polymer/polymer/polymer-element.js';
-import { CasperWizard } from '@casper2020/casper-wizard/casper-wizard.js';
+import { CasperWizard } from '@cloudware-casper/casper-wizard/casper-wizard.js';
 
 class CasperPrintDialog extends CasperWizard {
   static get template() {
