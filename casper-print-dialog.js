@@ -154,10 +154,12 @@ class CasperPrintDialog extends CasperWizard {
 
         switch (this.options.tube) {
           case 'casper-print-queue':
+          case 'casper-print-queue-2':
             ttr      = this.options.ttr     || 250;   // Almost as big as the default database timeout
             timeout  = this.options.timeout || 72000; // 20h
             break;
           case 'casper-print-queue-hd':
+          case 'casper-print-queue-2-hd':
             ttr      = this.options.ttr     || 36000; // Timeout will be controlled by the casper-print-queue
             timeout  = this.options.timeout || 72000; // 20h
             break;
@@ -299,21 +301,24 @@ class CasperPrintDialog extends CasperWizard {
 
     clearTimeout(this.fadeTimeoutObj);
 
+    let publicLink = response.redirect && response.redirect.public_link ? response.redirect.public_link : response.public_link;
+
     switch (this.options['action']) {
       case 'subscribe-print':
       case 'epaper-print':
+
         if ( CasperBrowser.isFirefox || CasperBrowser.isEdge || CasperBrowser.isIE ) {
-          this._openOnTab(response.public_link);
+          this._openOnTab(publicLink);
         } else {
-          this._print(response.public_link);
+          this._print(publicLink);
         }
         break;
       case 'subscribe-download':
       case 'epaper-download':
       default:
-        if ( status_code === 200 && response.public_link !== undefined ) {
+        if ( status_code === 200 && publicLink !== undefined ) {
           if ( ! CasperBrowser.isIos ) {
-            this._iframe.setAttribute('src', response.public_link);
+            this._iframe.setAttribute('src', publicLink);
             this.close();
           }
         }
