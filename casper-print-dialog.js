@@ -192,12 +192,11 @@ class CasperPrintDialog extends CasperWizard {
   _printFrame () {
     this._iframe.onload = undefined;
     this._iframe.focus();
-    if ( ! CasperBrowser.isIos ) {
-      this._iframe.contentWindow.print();
-      this.close();
-    } else {
-      this._fadeIn();
-    }
+
+    if (CasperBrowser.isIos) return this._fadeIn();
+    if (CasperBrowser.isSafari) return this._openLinkInTab();
+    this._iframe.contentWindow.print();
+    this.close();
   }
 
   _fadeIn () {
@@ -208,7 +207,7 @@ class CasperPrintDialog extends CasperWizard {
   _print (url) {
     this._iframe.onload = this._boundPrintFrame;
     // ends here for now
-    if ( CasperBrowser.isIos || CasperBrowser.isSafari ) {
+    if ( CasperBrowser.isIos ) {
       this._xhrDownloadFile(url);
     } else {
       this._iframe.setAttribute('src', url);
@@ -252,7 +251,7 @@ class CasperPrintDialog extends CasperWizard {
   }
 
   _openLinkInTab () {
-    this._openOnTab(this._dataSrc);
+    this._openOnTab(this._dataSrc || this._iframe.src);
   }
 
   _openOnTab (publicLink) {
