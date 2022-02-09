@@ -200,13 +200,21 @@ class CasperPrintDialog extends CasperWizard {
     this.className = "visible";
   }
 
+  _enforceRelativeUrl (url) {
+    if ( url[0] === '/') {
+      return url;
+    } else {
+      return url.substring(url.indexOf('/', url.indexOf('http://') === 0 ? 7 : 8));
+    }
+  }
+
   _print (url) {
     this._iframe.onload = this._boundPrintFrame;
     // ends here for now
     if ( CasperBrowser.isIos ) {
-      this._xhrDownloadFile(url);
+      this._xhrDownloadFile(this._enforceRelativeUrl(url));
     } else {
-      this._iframe.setAttribute('src', url);
+      this._iframe.setAttribute('src', this._enforceRelativeUrl(url));
     }
   }
 
@@ -252,7 +260,7 @@ class CasperPrintDialog extends CasperWizard {
 
   _openOnTab (publicLink) {
     try {
-      let win = window.open(publicLink, 'printing_tab');
+      let win = window.open(this._enforceRelativeUrl(publicLink), 'printing_tab');
       win.focus();
       this.close();
     } catch (e) {
@@ -296,9 +304,9 @@ class CasperPrintDialog extends CasperWizard {
 
     clearTimeout(this.fadeTimeoutObj);
 
-    let publicLink = response.redirect && response.redirect.public_link ? response.redirect.public_link : response.public_link;
-
-    publicLink = publicLink.substring(publicLink.indexOf('/', publicLink.indexOf('http://') === 0 ? 7 : 8));
+    let publicLink = this._enforceRelativeUrl(
+      response.redirect && response.redirect.public_link ? response.redirect.public_link : response.public_link
+    );
 
     switch (this.options['action']) {
       case 'subscribe-print':
