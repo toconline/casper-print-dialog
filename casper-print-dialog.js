@@ -1,5 +1,5 @@
 /*
-  - Copyright (c) 2014-2016 Cloudware S.A. All rights reserved.
+  - Copyright (c) 2014-2022 Cloudware S.A. All rights reserved.
   -
   - This file is part of casper-print-dialog.
   -
@@ -98,10 +98,6 @@ class CasperPrintDialog extends CasperWizard {
         </div>
       </casper-wizard-page>
     `;
-  }
-
-  static get is () {
-    return 'casper-print-dialog';
   }
 
   static get properties () {
@@ -302,6 +298,8 @@ class CasperPrintDialog extends CasperWizard {
 
     let publicLink = response.redirect && response.redirect.public_link ? response.redirect.public_link : response.public_link;
 
+    publicLink = publicLink.substring(publicLink.indexOf('/', publicLink.indexOf('http://') === 0 ? 7 : 8));
+
     switch (this.options['action']) {
       case 'subscribe-print':
       case 'epaper-print':
@@ -326,4 +324,4 @@ class CasperPrintDialog extends CasperWizard {
   }
 }
 
-window.customElements.define(CasperPrintDialog.is, CasperPrintDialog);
+window.customElements.define('casper-print-dialog', CasperPrintDialog);
