@@ -82,16 +82,30 @@ class CasperPrintDialog extends CasperWizard {
           color: #ff2f2f;
         }
 
+        .download_excel_icon {
+          width: 60px;
+          height: 60px;
+          color: green;
+        }
+
       </style>
 
       <casper-wizard-page id="Print" title="Impressão" next="Cancelar">
         <div id="print-dialog-overlay-holder">
           <template is="dom-if" if="[[iframeOverlay]]">
             <div id="print-dialog-overlay">
-              <div id="print-dialog-overlay-message" on-click="_openLinkInTab">
-                <casper-icon icon="fa-light:file-pdf" class="download_icon"></casper-icon>
-                <span>Carregue aqui para ver o seu PDF</span>
-              </div>
+              <template is="dom-if" if="[[!isExcel]]">
+                <div id="print-dialog-overlay-message" on-click="_openLinkInTab">
+                  <casper-icon icon="fa-light:file-pdf" class="download_icon"></casper-icon>
+                  <span>Carregue aqui para ver o seu PDF</span>
+                </div>
+              </template>
+              <template is="dom-if" if="[[isExcel]]">
+                <div id="print-dialog-overlay-message">
+                  <casper-icon icon="fa-light:file-excel" class="download_excel_icon"></casper-icon>
+                  <span>Carregue aqui para ver o seu Excel</span>
+                </div>
+              </template>
             </div>
           </template>
           <iframe class="iframe" id="iframe" srcdoc$="[[srcdoc]]"></iframe>
@@ -119,12 +133,14 @@ class CasperPrintDialog extends CasperWizard {
     this.addEventListener('opened-changed', e => this._onOpenedChanged(e));
     this.disablePrevious();
     this._iframe = this.$.iframe;
+    this.isExcel = false;
     this.iframeOverlay = CasperBrowser.isIos || CasperBrowser.isSafari;
     this._boundPrintFrame = this._printFrame.bind(this);
   }
 
   _onOpenedChanged (event) {
     if ( event.detail.value === true ) {
+      if (this?.options?.isExcel) this.isExcel = true;
       this.removeAttribute('with-backdrop');
       this.className = '';
       this.setTitle(this.options.title || 'Impressão');
@@ -324,8 +340,8 @@ class CasperPrintDialog extends CasperWizard {
         if ( status_code === 200 && publicLink !== undefined ) {
           if ( ! CasperBrowser.isIos ) {
             this._iframe.setAttribute('src', publicLink);
-            this.close();
           }
+          this.close();
         }
         break;
     }
