@@ -1,13 +1,13 @@
 {
   "description": "Helper dialog to handle print jobs in casper applications",
-  "name": "@cloudware-casper/casper-print-dialog",
+  "name": "@toconline/casper-print-dialog",
   "version": "2.1.2",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "main": "casper-print-dialog.js",
   "dependencies": {
-    "@cloudware-casper/casper-wizard": "^2.x",
+    "@toconline/casper-wizard": "^2.x",
     "@polymer/polymer": "^3.x"
   }
 }

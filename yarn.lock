@@ -2,62 +2,22 @@
 # yarn lockfile v1
 
 
-"@cloudware-casper/casper-icons@^3.x":
-  version "3.0.7"
-  resolved "https://npm.pkg.github.com/download/@cloudware-casper/casper-icons/3.0.7/758797540c564467103fa065e88afc3f3a785dea9f944c5267882dffbe50b22b#371927b0444532a43450bd585be686b1099cf987"
-  integrity sha512-Rq9jzbYqHijIJoNLcOSplShKeENES2vaGz4JA36fPhMg7PH6ESJZAm5XEzEo7thvT8xR6zFzZXtHZ/GaCyn8HA==
-  dependencies:
-    ink-ripple alex-saunders/ink-ripple
-    lit "^2.0.0-rc.2"
+"@lit-labs/ssr-dom-shim@^1.0.0", "@lit-labs/ssr-dom-shim@^1.1.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@lit-labs/ssr-dom-shim/-/ssr-dom-shim-1.3.0.tgz#a28799c463177d1a0b0e5cefdc173da5ac859eb4"
+  integrity sha512-nQIWonJ6eFAvUUrSlwyHDm/aE8PBDu5kRpL0vHMg6K8fK3Diq1xdPjTnsJSwxABhaZ+5eBi1btQB5ShUTKo4nQ==
 
-"@cloudware-casper/casper-overlay-behavior@^1.x":
-  version "1.0.0"
-  resolved "https://npm.pkg.github.com/download/@cloudware-casper/casper-overlay-behavior/1.0.0/00e8d24f2599c0f15ae4500d03fc71fed252251f843d35ae9ee3a63995d01fad#af4a3084958aa01d7eb9623d4dc6121893cdc235"
-  integrity sha512-S7/iafhTc9ukWDOVNFMHWu9cIN78mbm/VP1JmKdS+2I7rXiKxep6W8DNfr7SsU7ix0qT38/uY8hSaqh/11gOLg==
+"@lit/reactive-element@^1.3.0", "@lit/reactive-element@^1.6.0":
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/@lit/reactive-element/-/reactive-element-1.6.3.tgz#25b4eece2592132845d303e091bad9b04cdcfe03"
+  integrity sha512-QuTgnG52Poic7uM1AN5yJ09QMe0O28e10XzSvWDz02TJiiKee4stsiownEIadWm8nYzyDAyT+gKzUoZmiWQtsQ==
   dependencies:
-    "@polymer/iron-overlay-behavior" "^3.x"
-
-"@cloudware-casper/casper-toast@^2.x":
-  version "2.0.1"
-  resolved "https://npm.pkg.github.com/download/@cloudware-casper/casper-toast/2.0.1/3f0443c38dcd7470cfd6b4571bfad2c7e3bb0f13aad7ccccb2495cc0a91e99cc#abbe146f0afd5bc74465a27fbd05302609d96e92"
-  integrity sha512-X0PX5gAXl1hOLyPwH3MXvLFyRxcSNlKorIeePsE9+ivx+XkLSs5x+AQ2QtB/vc68LidDb9V+S6Pf8Vndf5Oj2A==
-  dependencies:
-    "@cloudware-casper/casper-icons" "^3.x"
-    "@polymer/paper-toast" "^3.0.0"
-    "@polymer/polymer" "^3.0.0"
-
-"@cloudware-casper/casper-wizard@^2.x":
-  version "2.0.1"
-  resolved "https://npm.pkg.github.com/download/@cloudware-casper/casper-wizard/2.0.1/814b6d60deb70e15282d4c278f86970fca98b2409d6a9e712d151294b70127cc#384211363e395c53d3b71fd561c9d55fa15e503c"
-  integrity sha512-MqYJdlnJO8+xvKa7n5JUT9XYd70wrnRXTNAj9PUxDHQ45e9706CHHivlumeNTWA8tFf/D/nytERiVQANKB/aDg==
-  dependencies:
-    "@cloudware-casper/casper-icons" "^3.x"
-    "@cloudware-casper/casper-overlay-behavior" "^1.x"
-    "@cloudware-casper/casper-toast" "^2.x"
-    "@polymer/paper-button" "^3.x"
-    "@polymer/paper-icon-button" "^3.x"
-    "@polymer/paper-ripple" "^3.x"
-    "@polymer/paper-toast" "^3.x"
-    "@polymer/polymer" "^3.x"
-    "@vaadin/vaadin-progress-bar" "^1.x"
-    "@vaadin/vaadin-upload" "^4.x"
-
-"@lit/reactive-element@^1.0.0-rc.2":
-  version "1.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@lit/reactive-element/-/reactive-element-1.0.0-rc.4.tgz#3473f6a687e9925fc2e9ff1b716a86b5f4b576ad"
-  integrity sha512-dJMha+4NFYdpnUJzRrWTFV5Hdp9QHWFuPnaoqonrKl4lGJVnYez9mu8ev9F/5KM47tjAjh22DuRHrdFDHfOijA==
+    "@lit-labs/ssr-dom-shim" "^1.0.0"
 
 "@polymer/font-roboto@^3.0.1":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@polymer/font-roboto/-/font-roboto-3.0.2.tgz#80cdaa7225db2359130dfb2c6d9a3be1820020c3"
   integrity sha512-tx5TauYSmzsIvmSqepUPDYbs4/Ejz2XbZ1IkD7JEGqkdNUJlh+9KU85G56Tfdk/xjEZ8zorFfN09OSwiMrIQWA==
-
-"@polymer/iron-a11y-announcer@^3.0.0-pre.26":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@polymer/iron-a11y-announcer/-/iron-a11y-announcer-3.0.2.tgz#730dd36ccb2e042ecd5160ba439c2bf2f8a97412"
-  integrity sha512-LqnMF39mXyxSSRbTHRzGbcJS8nU0NVTo2raBOgOlpxw5yfGJUVcwaTJ/qy5NtWCZLRfa4suycf0oAkuUjHTXHQ==
-  dependencies:
-    "@polymer/polymer" "^3.0.0"
 
 "@polymer/iron-a11y-keys-behavior@^3.0.0-pre.26":
   version "3.0.1"
@@ -128,7 +88,7 @@
   dependencies:
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/iron-overlay-behavior@^3.0.0-pre.27", "@polymer/iron-overlay-behavior@^3.x":
+"@polymer/iron-overlay-behavior@^3.x":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@polymer/iron-overlay-behavior/-/iron-overlay-behavior-3.0.3.tgz#29c198e19e05bb2bcf7d86d3c11848cb93301d00"
   integrity sha512-Q/Fp0+uOQQ145ebZ7T8Cxl4m1tUKYjyymkjcL2rXUm+aDQGb1wA1M1LYxUF5YBqd+9lipE0PTIiYwA2ZL/sznA==
@@ -200,22 +160,50 @@
     "@polymer/iron-flex-layout" "^3.0.0-pre.26"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/paper-toast@^3.0.0", "@polymer/paper-toast@^3.x":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@polymer/paper-toast/-/paper-toast-3.0.1.tgz#213aa3373909cee7c8e17299cf70fa2603bfb358"
-  integrity sha512-pizuogzObniDdICUc6dSLrnDt2VzzoRne1gCmbD6sfOATVv5tc8UfrqhA2iHngbNBEbniBiciS3iogdp5KTVUQ==
-  dependencies:
-    "@polymer/iron-a11y-announcer" "^3.0.0-pre.26"
-    "@polymer/iron-fit-behavior" "^3.0.0-pre.26"
-    "@polymer/iron-overlay-behavior" "^3.0.0-pre.27"
-    "@polymer/polymer" "^3.0.0"
-
 "@polymer/polymer@^3.0.0", "@polymer/polymer@^3.x":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@polymer/polymer/-/polymer-3.4.1.tgz#333bef25711f8411bb5624fb3eba8212ef8bee96"
   integrity sha512-KPWnhDZibtqKrUz7enIPOiO4ZQoJNOuLwqrhV2MXzIt3VVnUVJVG5ORz4Z2sgO+UZ+/UZnPD0jqY+jmw/+a9mQ==
   dependencies:
     "@webcomponents/shadycss" "^1.9.1"
+
+"@toconline/casper-icons@^3.x":
+  version "3.2.6"
+  resolved "https://npm.pkg.github.com/download/@toconline/casper-icons/3.2.6/157a96d60ac922bbc38294b02c1de2b7617e4f36#157a96d60ac922bbc38294b02c1de2b7617e4f36"
+  integrity sha512-zl1H4WLCQP7poxEi5Uq1ZAY1EmbGUlAh0QoTloZ7f8ErVKg66/Q70GkgRuL7jnCySa7TWwOxj2wtHktuouksUw==
+  dependencies:
+    ink-ripple alex-saunders/ink-ripple
+    lit "^2.x"
+
+"@toconline/casper-overlay-behavior@^1.x":
+  version "1.0.0"
+  resolved "https://npm.pkg.github.com/download/@toconline/casper-overlay-behavior/1.0.0/33f484114b22907403eb95902e3b1be7f56a14d8#33f484114b22907403eb95902e3b1be7f56a14d8"
+  integrity sha512-bbkOQv8a0rJcjRw0YJBHilBs87nY6BGvIvp16lJPqsMYktr9teaNwLlxhnDw82o8ZfWfUFks9GOjYSoO4P8HYg==
+  dependencies:
+    "@polymer/iron-overlay-behavior" "^3.x"
+
+"@toconline/casper-toast@^2.x":
+  version "2.1.5"
+  resolved "https://npm.pkg.github.com/download/@toconline/casper-toast/2.1.5/0cedc515af10e6525d7686fdf920a259a8fcb308#0cedc515af10e6525d7686fdf920a259a8fcb308"
+  integrity sha512-dOyE48UypPDEHHW9WUyrtwKsATSbwvr1QsFqFeTqk00ZEU9RSnLRqp3NeW/A1JAqFu9aAq8wEqesAMdHM+/Crw==
+  dependencies:
+    "@toconline/casper-icons" "^3.x"
+    lit "^2.x"
+
+"@toconline/casper-wizard@^2.x":
+  version "2.3.0"
+  resolved "https://npm.pkg.github.com/download/@toconline/casper-wizard/2.3.0/aef0f28708c6ce77f956e0be1a9538612ce65aae#aef0f28708c6ce77f956e0be1a9538612ce65aae"
+  integrity sha512-SxZD0c5AwJAsbIYBVDb06MTvvPye4cvX2j/dteJzJYQOa8qkdDYFUtz/9GDsbvy8NL8Y1Y7Kr7U8C1mc0P3RGA==
+  dependencies:
+    "@polymer/paper-button" "^3.x"
+    "@polymer/paper-icon-button" "^3.x"
+    "@polymer/paper-ripple" "^3.x"
+    "@polymer/polymer" "^3.x"
+    "@toconline/casper-icons" "^3.x"
+    "@toconline/casper-overlay-behavior" "^1.x"
+    "@toconline/casper-toast" "^2.x"
+    "@vaadin/vaadin-progress-bar" "^1.x"
+    "@vaadin/vaadin-upload" "^4.x"
 
 "@types/trusted-types@^2.0.2":
   version "2.0.2"
@@ -315,30 +303,43 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/shadycss/-/shadycss-1.9.6.tgz#a8c5db867e49200a05cf8d5008029c09b7861979"
   integrity sha512-5fFjvP0jQJZoXK6YzYeYcIDGJ5oEsdjr1L9VaYLw5yxNd4aRz4srMpwCwldeNG0A6Hvr9igbG7fCsBeiiCXd7A==
 
-ink-ripple@alex-saunders/ink-ripple:
+"ink-ripple@github:alex-saunders/ink-ripple":
   version "0.0.0"
   resolved "https://codeload.github.com/alex-saunders/ink-ripple/tar.gz/88e4d753bba9f7b57b372c62a4517bb091c7f713"
 
-lit-element@^3.0.0-rc.2:
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-3.0.0-rc.4.tgz#71abe4e38bbcafb9e8977798121634db331868e4"
-  integrity sha512-6X7RCHTNhAWetVSr8VccALnRcn3W3VDqOfjY5cAfyfGq8Y9IbWnyBP8/ihpRg2atHbM2NsGL6pjDrFL9dRdIKg==
+lit-element@^2.0.0:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-2.5.1.tgz#3fa74b121a6cd22902409ae3859b7847d01aa6b6"
+  integrity sha512-ogu7PiJTA33bEK0xGu1dmaX5vhcRjBXCFexPja0e7P7jqLhTpNKYRPmE+GmiCaRVAbiQKGkUgkh/i6+bh++dPQ==
   dependencies:
-    "@lit/reactive-element" "^1.0.0-rc.2"
-    lit-html "^2.0.0-rc.4"
+    lit-html "^1.1.1"
 
-lit-html@^2.0.0-rc.4:
-  version "2.0.0-rc.5"
-  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.0.0-rc.5.tgz#2051f79418bc244853b6e1d93fdf3833cab2cadb"
-  integrity sha512-vFnjzqwQijC9By5F50c3sjI5PXPYoIvbGfpbbDOv+8BBRYdMR+FDYyMeCC3T3iIZx8EE6aIow2aTaG+HS5SV4A==
+lit-element@^3.3.0:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-3.3.3.tgz#10bc19702b96ef5416cf7a70177255bfb17b3209"
+  integrity sha512-XbeRxmTHubXENkV4h8RIPyr8lXc+Ff28rkcQzw3G6up2xg5E8Zu1IgOWIwBLEQsu3cOVFqdYwiVi0hv0SlpqUA==
+  dependencies:
+    "@lit-labs/ssr-dom-shim" "^1.1.0"
+    "@lit/reactive-element" "^1.3.0"
+    lit-html "^2.8.0"
+
+lit-html@^1.1.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-1.4.1.tgz#0c6f3ee4ad4eb610a49831787f0478ad8e9ae5e0"
+  integrity sha512-B9btcSgPYb1q4oSOb/PrOT6Z/H+r6xuNzfH4lFli/AWhYwdtrgQkQWBbIc6mdnf6E2IL3gDXdkkqNktpU0OZQA==
+
+lit-html@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.8.0.tgz#96456a4bb4ee717b9a7d2f94562a16509d39bffa"
+  integrity sha512-o9t+MQM3P4y7M7yNzqAyjp7z+mQGa4NS4CxiyLqFPyFWyc4O+nodLrkrxSaCTrla6M5YOLaT3RpbbqjszB5g3Q==
   dependencies:
     "@types/trusted-types" "^2.0.2"
 
-lit@^2.0.0-rc.2:
-  version "2.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/lit/-/lit-2.0.0-rc.4.tgz#ea9eb44fa5cc974b7af4a45f8d82172d0b3f9c26"
-  integrity sha512-HPJrSvK377a1E5eSAUG+eTJWIOJFGNtnfbGPHY4vbc0Ud9GTFSwMEbeAOIJnA+5q92cafR38F1bWOyo4a2ncag==
+lit@^2.x:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/lit/-/lit-2.8.0.tgz#4d838ae03059bf9cafa06e5c61d8acc0081e974e"
+  integrity sha512-4Sc3OFX9QHOJaHbmTMk28SYgVxLN3ePDjg7hofEft2zWlehFL3LiAuapWc4U/kYwMYJSh2hTCPZ6/LIC7ii0MA==
   dependencies:
-    "@lit/reactive-element" "^1.0.0-rc.2"
-    lit-element "^3.0.0-rc.2"
-    lit-html "^2.0.0-rc.4"
+    "@lit/reactive-element" "^1.6.0"
+    lit-element "^3.3.0"
+    lit-html "^2.8.0"
